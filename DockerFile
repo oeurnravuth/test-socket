@@ -1,11 +1,29 @@
 # Dockerfile
-FROM node:10.15.2
+# FROM node:10.15.2
+
+# WORKDIR /app
+
+# COPY . /app
+
+# RUN npm install
+
+# EXPOSE 3000
+# CMD npm start
+
+FROM keymetrics/pm2:10-alpine
 
 WORKDIR /app
 
+# Bundle APP files
 COPY . /app
 
-RUN npm install
+# Install app dependencies
+ENV NPM_CONFIG_LOGLEVEL warn
+RUN npm install --production
+
+# Show current folder structure in logs
+RUN ls -al -R
 
 EXPOSE 3000
-CMD npm start
+
+CMD [ "pm2-runtime", "start", "pm2.json" ]
